@@ -11,18 +11,18 @@ $(document).ready(function() {
         }
       $('#streamerList').append(streamerList);
     };
-  
+
   var injectStreamerData = function(streams) {
     var streamerId, channelsURL, streamsURL;
-    
+
     for (var i=0; i < streams.length; i++) {
       // protect i inside of an immediately invoked function
       (function(i) {
         streamerId = streams[i];
         channelsURL = 'https://api.twitch.tv/kraken/channels/' + streamerId + '?callback=?';
         streamsURL = 'https://api.twitch.tv/kraken/streams/' + streamerId + '?callback=?';
-        
-        $.getJSON(channelsURL, function(channelResults) {        
+
+        $.getJSON(channelsURL, function(channelResults) {
           $('#' + streams[i] + '-name').html(channelResults.display_name);
           if (channelResults.logo !== null) $('#' + streams[i] + '-image img').attr("src", channelResults.logo);
 
@@ -31,7 +31,7 @@ $(document).ready(function() {
             var clippedStatus = channelResults.status.slice(0,34) + '...';
             $('#' + streams[i] + '-description').html(clippedStatus).hide();
             }
-          } 
+          }
         });
         $.getJSON(streamsURL, function(streamResults) {
           if (streamResults.stream !== null) {
@@ -42,38 +42,38 @@ $(document).ready(function() {
       })(i);
     }
   };
-  
+
   var tabSwitcher = function() {
-    
+
     $('#tabAll').click(function() {
       $('#tabOnline, #tabOffline').removeClass('arrow');
       $(this).addClass('arrow');
       $('.streamer-block').show();
     });
-    
+
     $('#tabOnline').click(function() {
       $('#tabAll, #tabOffline').removeClass('arrow');
       $(this).addClass('arrow');
       $('.streamer-block').show();
       $('.glyphicon-remove').parents(".streamer-block").hide();
     });
-    
+
     $('#tabOffline').click(function() {
       $('#tabOnline, #tabAll').removeClass('arrow');
       $(this).addClass('arrow');
       $('.streamer-block').show();
       $('.glyphicon-ok').parents(".streamer-block").hide();
     });
-    
-    
+
+
   };
-  
+
   var searchBar = function() {
   // credit for this list filtering code to Charlie Mauck from the jQuery forum
     $('#search').keyup(function(){
        var valThis = $(this).val().toLowerCase();
         if(valThis == ""){
-            $('#streamerList > li').show();           
+            $('#streamerList > li').show();
         } else {
             $('#streamerList > li').each(function(){
                 var text = $(this).attr('id').toLowerCase();
@@ -82,10 +82,10 @@ $(document).ready(function() {
        };
     });
   };
-  
+
   createStreamerList(streams);
   injectStreamerData(streams);
   tabSwitcher();
   searchBar();
-  
+
 });
