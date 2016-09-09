@@ -1,21 +1,25 @@
 body {
+  box-sizing: border-box;
   background-color: #D5F0FF;
 }
 
 ul {
   list-style: none;
-  padding-left: 0;
+  padding: 0;
 }
 
 .wrapper {
-  width: 304.3px;
+  width: 300px;
   margin: 10px auto;
   border-top: 1px solid #88D6FF;
 }
+
 .tabs li {
   float: left;
   font-size: 16px;
-  padding: 1em 2em;
+  width: 100px;
+  padding: 16px 0;
+  text-align: center;
   background-color: #88D6FF;
   color: #fff;
   cursor: pointer;
@@ -101,7 +105,7 @@ ul {
   overflow: hidden;
 }
 
-.tabs li.arrow::after { 
+.tabs li.arrow::after {
 content: '';
 display: block;
 position: absolute;
@@ -125,4 +129,3 @@ border-width: 10px;
 #streamerList>li:last-of-type ul {
   margin-bottom: 0;
 }
-
