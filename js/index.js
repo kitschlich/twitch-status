@@ -1,6 +1,6 @@
 $(document).ready(function() {
 
-    var streams = ["FreeCodeCamp", "DevWars", "MedryBW", "storbeck", "terakilobyte", "habathcx","RobotCaleb","thomasballinger","noobs2ninjas","beohoff"];
+    var streams = ["kittyplays", "omgitspotter", "missharvey", "DevWars", "MedryBW", "storbeck", "habathcx", "RobotCaleb", "noobs2ninjas"];
 
     var createStreamerList = function(streams) {
       var streamerItem;
@@ -19,24 +19,42 @@ $(document).ready(function() {
       // protect i inside of an immediately invoked function
       (function(i) {
         streamerId = streams[i];
-        channelsURL = 'https://api.twitch.tv/kraken/channels/' + streamerId + '?callback=?';
-        streamsURL = 'https://api.twitch.tv/kraken/streams/' + streamerId + '?callback=?';
+        channelsURL = 'https://api.twitch.tv/kraken/channels/' + streamerId;
+        streamsURL = 'https://api.twitch.tv/kraken/streams/' + streamerId;
 
-        $.getJSON(channelsURL, function(channelResults) {
-          $('#' + streams[i] + '-name').html(channelResults.display_name);
-          if (channelResults.logo !== null) $('#' + streams[i] + '-image img').attr("src", channelResults.logo);
+        $.ajax({
+          url: channelsURL,
+          type: 'GET',
+          dataType: 'json',
+          headers: {
+            'Client-ID': 'sz8wnw3baawnchqpuimfzhbbq6ghy9x'
+          },
+          success: function(channelResults) {
+            $('#' + streams[i] + '-name').html(channelResults.display_name);
+            if (channelResults.logo !== null) $('#' + streams[i] + '-image img').attr("src", channelResults.logo);
 
-          if (channelResults.status !== null) {
-            if (channelResults.status.length > 36) {
-            var clippedStatus = channelResults.status.slice(0,34) + '...';
-            $('#' + streams[i] + '-description').html(clippedStatus).hide();
+            if (channelResults.status !== null) {
+              if (channelResults.status.length > 36) {
+              var clippedStatus = channelResults.status.slice(0,34) + '...';
+              $('#' + streams[i] + '-description').html(clippedStatus).hide();
+              }
             }
           }
         });
-        $.getJSON(streamsURL, function(streamResults) {
-          if (streamResults.stream !== null) {
-            $('#' + streams[i] + '-status span').removeClass('glyphicon glyphicon-remove').addClass('glyphicon glyphicon-ok');
-            $('#' + streams[i] + '-description').show();
+
+        //$.getJSON(streamsURL, function(streamResults) {
+        $.ajax({
+          url: streamsURL,
+          type: 'GET',
+          dataType: 'json',
+          headers: {
+            'Client-ID': 'sz8wnw3baawnchqpuimfzhbbq6ghy9x'
+          },
+          success: function(streamResults) {
+            if (streamResults.stream !== null) {
+              $('#' + streams[i] + '-status span').removeClass('glyphicon glyphicon-remove').addClass('glyphicon glyphicon-ok');
+              $('#' + streams[i] + '-description').show();
+            }
           }
         });
       })(i);
@@ -71,7 +89,7 @@ $(document).ready(function() {
   var searchBar = function() {
   // credit for this list filtering code to Charlie Mauck from the jQuery forum
     $('#search').keyup(function(){
-       var valThis = $(this).val().toLowerCase();
+       var valThis = $(this).val().trim().toLowerCase();
         if(valThis == ""){
             $('#streamerList > li').show();
         } else {
